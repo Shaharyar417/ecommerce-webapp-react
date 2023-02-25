@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
@@ -38,13 +38,14 @@ class App extends React.Component {
     this.unsubscribeFromAuth();
   }
   render() {
+
     return (
       <div>
         <Header />
         <Routes>
           <Route exact path='/' element={<HomePage />} />
           <Route path='/shop' element={<ShopPage />} />
-          <Route path='/signin' element={<SignInAndSignUp />} />
+          <Route exact path='/signin' element={this.props.currentUser ? (<Navigate to='/' />) : (<SignInAndSignUp />)} />
         </Routes>
 
       </div>
@@ -53,7 +54,11 @@ class App extends React.Component {
 
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
 const mapDispatchToProps = dispatch => ({
   setCurrenUser: user => dispatch(setCurrenUser(user))
 })
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
