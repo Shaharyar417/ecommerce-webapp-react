@@ -1,37 +1,30 @@
 import React from "react";
 import './menu-item.styles.scss';
-import {
-    useLocation,
-    useNavigate,
-    useParams
-} from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
-function withRouter(Component) {
-    function ComponentWithRouterProp(props) {
-        let location = useLocation();
-        let navigate = useNavigate();
-        let params = useParams();
-        return (
-            <Component
-                {...props}
-                router={{ location, navigate, params }}
-            />
-        );
+
+const withRouter = (Component) => {
+    const Wrapper = (props) => {
+        const history = useNavigate();
+        return <Component history={history} {...props} />
     }
-
-    return ComponentWithRouterProp;
+    return Wrapper;
 }
 
 const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => {
+
     return (
+
         <div className={`${size} menu-item`}
-            onClick={() => history.push(`${match.url}${linkUrl}`)}>
+        // onClick={() => history.push(`${match.url}${linkUrl}`)}
+        >
             <div className="background-image" style={{
                 backgroundImage: `url(${imageUrl})`
             }} />
             <div className="content">
                 <h1 className="title">{title.toUpperCase()}</h1>
                 <span className="subtitle">SHOP NOW</span>
+                {/* <Link className="subtitle" to={`${match.url}${linkUrl}`}>SHOP NOW</Link> */}
             </div>
         </div>
     )
